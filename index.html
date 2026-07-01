@@ -64,11 +64,30 @@
     white-space:nowrap;
   }
 
+  /* ---------- LOCATION ROW ---------- */
+  .loc-row{
+    flex:0 0 auto; display:flex; gap:8px; padding:10px 16px 8px;
+    overflow-x:auto; border-bottom:1px solid rgba(255,255,255,0.06);
+  }
+  .loc-row::-webkit-scrollbar{display:none;}
+  .loc-chip{
+    flex:0 0 auto; display:flex; align-items:center; gap:6px;
+    padding:8px 13px; border-radius:14px; font-size:12px; font-weight:700;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
+    color:var(--cream); white-space:nowrap;
+  }
+  .loc-chip .ic{font-size:15px;}
+  .loc-chip.active{background:rgba(232,163,61,.18); border-color:var(--amber); color:var(--amber);}
+  .loc-chip.locked{opacity:.55;}
+  .loc-chip .lock-cost{font-size:10px; opacity:.75; margin-left:1px;}
+
   /* ---------- WATER SCENE ---------- */
   .scene{
     position:relative; flex:1 1 auto; overflow:hidden;
-    min-height:0;
+    min-height:0; transition:filter .3s ease;
   }
+  .scene.loc-lake{filter:hue-rotate(35deg) saturate(1.05);}
+  .scene.loc-sea{filter:hue-rotate(-22deg) saturate(1.25) brightness(1.05);}
   .stars{position:absolute; inset:0; opacity:.5; pointer-events:none;}
   .stars span{position:absolute; width:2px; height:2px; background:#fff; border-radius:50%; opacity:.4; animation:twinkle 3s infinite ease-in-out;}
   @keyframes twinkle{0%,100%{opacity:.15}50%{opacity:.7}}
@@ -147,13 +166,19 @@
   }
   nav button{
     flex:1; background:none; border:none; color:var(--cream); opacity:.55;
-    font-family:'Manrope',sans-serif; font-weight:700; font-size:11px;
-    padding:10px 0 12px; display:flex; flex-direction:column; align-items:center; gap:3px;
+    font-family:'Manrope',sans-serif; font-weight:700; font-size:10px;
+    padding:9px 0 11px; display:flex; flex-direction:column; align-items:center; gap:3px;
+    position:relative;
   }
-  nav button .ic{font-size:19px;}
+  nav button .ic{font-size:18px;}
   nav button.active{opacity:1; color:var(--amber);}
+  nav button .badge-dot{
+    position:absolute; top:5px; right:calc(50% - 16px);
+    width:7px; height:7px; border-radius:50%; background:var(--amber);
+    box-shadow:0 0 0 2px rgba(6,20,27,.6);
+  }
 
-  /* ---------- PANELS (inventory/shop overlay) ---------- */
+  /* ---------- PANELS ---------- */
   .panel{
     position:absolute; inset:0; background:var(--bg-deep);
     display:flex; flex-direction:column; transform:translateY(100%);
@@ -210,6 +235,72 @@
   .shop-buy:disabled{background:rgba(255,255,255,.08); color:rgba(255,255,255,.35);}
   .shop-buy.tag{background:rgba(95,184,120,.25); color:#a9e8bb;}
 
+  /* ---------- PROFILE CARD (in Shop) ---------- */
+  .profile-card{
+    display:flex; align-items:center; gap:12px; padding:13px; margin-bottom:14px;
+    border-radius:16px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08);
+  }
+  .profile-ava{
+    width:42px; height:42px; border-radius:50%; background:linear-gradient(160deg,var(--cyan),var(--teal));
+    display:flex; align-items:center; justify-content:center; font-size:19px; flex:0 0 auto;
+    overflow:hidden;
+  }
+  .profile-ava img{width:100%; height:100%; object-fit:cover; display:block;}
+  .profile-info{flex:1; min-width:0;}
+  .profile-name{font-weight:800; font-size:13.5px;}
+  .profile-sub{font-size:11px; opacity:.6; margin-top:1px;}
+  .profile-sync-btn{
+    flex:0 0 auto; background:var(--teal); color:var(--cream); border:none; border-radius:10px;
+    font-size:11px; font-weight:700; padding:9px 10px; white-space:nowrap;
+  }
+
+  /* ---------- QUESTS ---------- */
+  .quest-row{
+    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.06);
+    border-radius:14px; padding:13px; margin-bottom:10px;
+  }
+  .quest-top{display:flex; justify-content:space-between; align-items:flex-start; gap:8px; margin-bottom:8px;}
+  .quest-title{font-weight:700; font-size:13px; line-height:1.4;}
+  .quest-reward{font-size:11px; opacity:.7; white-space:nowrap; flex:0 0 auto;}
+  .quest-bar{height:6px; border-radius:4px; background:rgba(255,255,255,.08); overflow:hidden; margin-bottom:9px;}
+  .quest-bar-fill{height:100%; background:var(--cyan); border-radius:4px; transition:width .3s ease;}
+  .quest-claim{
+    width:100%; border:none; border-radius:10px; padding:9px 0; font-weight:800; font-size:12.5px;
+    background:var(--amber); color:#241404;
+  }
+  .quest-claim:disabled{background:rgba(255,255,255,.08); color:rgba(255,255,255,.35);}
+  .quest-claim.done{background:rgba(95,184,120,.22); color:#a9e8bb;}
+  .quest-reset-hint{text-align:center; font-size:11px; opacity:.45; margin-top:4px;}
+
+  /* ---------- LEADERBOARD ---------- */
+  .lb-row{
+    display:flex; align-items:center; gap:10px; padding:10px 11px; border-radius:12px;
+    margin-bottom:6px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.05);
+  }
+  .lb-row.me{border-color:var(--amber); background:rgba(232,163,61,.08);}
+  .lb-rank{font-family:'Fraunces',serif; font-weight:700; width:24px; text-align:center; opacity:.7; font-size:14px;}
+  .lb-rank.top1{color:#FFD700; opacity:1;}
+  .lb-rank.top2{color:#C9CFD6; opacity:1;}
+  .lb-rank.top3{color:#CD7F32; opacity:1;}
+  .lb-name{flex:1; font-size:13px; font-weight:700; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .lb-score{font-family:'Fraunces',serif; font-weight:700; font-size:13px; opacity:.85; flex:0 0 auto;}
+  .lb-ava{
+    width:28px; height:28px; border-radius:50%; flex:0 0 auto; overflow:hidden;
+    background:linear-gradient(160deg,var(--cyan),var(--teal));
+    display:flex; align-items:center; justify-content:center; font-size:13px;
+  }
+  .lb-ava img{width:100%; height:100%; object-fit:cover; display:block;}
+
+  /* ---------- TOAST ---------- */
+  .toast{
+    position:absolute; bottom:78px; left:50%; transform:translateX(-50%) translateY(10px);
+    background:rgba(20,20,20,.92); color:var(--cream); padding:10px 18px; border-radius:14px;
+    font-size:12.5px; font-weight:700; opacity:0; pointer-events:none; z-index:20;
+    transition:opacity .2s, transform .2s; white-space:nowrap; max-width:88%;
+    text-overflow:ellipsis; overflow:hidden; text-align:center;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
+
   /* ---------- CATCH MODAL ---------- */
   .modal-bg{
     position:absolute; inset:0; background:rgba(0,0,0,.6); display:none;
@@ -248,13 +339,16 @@
     <div class="coins">💰 <span id="coinsVal">0</span></div>
   </header>
 
-  <div class="scene">
+  <div class="loc-row" id="locRow"></div>
+
+  <div class="scene" id="scene">
     <div class="stars" id="stars"></div>
     <div class="status-banner" id="statusBanner">Закинь вудку 🎣</div>
     <div class="line" id="line" style="height:42%;"></div>
     <div class="bobber" id="bobber" style="top:42%;">🔴</div>
     <div class="water"></div>
     <div class="bite-timer" id="biteTimer"><div class="bite-timer-fill" id="biteTimerFill"></div></div>
+    <div class="toast" id="toast"></div>
   </div>
 
   <div class="action-zone">
@@ -264,9 +358,20 @@
 
   <nav>
     <button class="nav-btn active" data-tab="fish"><span class="ic">🎣</span>Рибалка</button>
+    <button class="nav-btn" data-tab="quests"><span class="ic">📜</span>Квести<span class="badge-dot" id="questDot" style="display:none"></span></button>
     <button class="nav-btn" data-tab="inv"><span class="ic">🧺</span>Інвентар</button>
     <button class="nav-btn" data-tab="shop"><span class="ic">🛒</span>Магазин</button>
+    <button class="nav-btn" data-tab="lb"><span class="ic">🏆</span>Топ</button>
   </nav>
+
+  <!-- QUESTS PANEL -->
+  <div class="panel" id="questsPanel">
+    <div class="panel-head">
+      <h2>Щоденні квести 📜</h2>
+      <button class="close" data-close="quests">✕</button>
+    </div>
+    <div class="panel-body" id="questsBody"></div>
+  </div>
 
   <!-- INVENTORY PANEL -->
   <div class="panel" id="invPanel">
@@ -286,6 +391,15 @@
     <div class="panel-body" id="shopBody"></div>
   </div>
 
+  <!-- LEADERBOARD PANEL -->
+  <div class="panel" id="lbPanel">
+    <div class="panel-head">
+      <h2>Топ рибаків 🏆</h2>
+      <button class="close" data-close="lb">✕</button>
+    </div>
+    <div class="panel-body" id="lbBody"></div>
+  </div>
+
   <!-- CATCH MODAL -->
   <div class="modal-bg" id="catchModalBg">
     <div class="catch-card" id="catchCard"></div>
@@ -300,6 +414,17 @@
 /* ============ TELEGRAM SDK ============ */
 var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
 if(tg){ try{ tg.ready(); tg.expand(); }catch(e){} }
+
+/* ============ FIREBASE CONFIG (optional, for global leaderboard) ============
+   Заповни своїми даними з консолі Firebase (Project settings -> General ->
+   Your apps -> SDK setup), щоб увімкнути загальний рейтинг гравців.
+   Поки databaseURL порожній, розділ "Топ" показує лише твій локальний рахунок. */
+var FIREBASE_CONFIG = {
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: ""
+};
 
 /* ============ STORAGE (CloudStorage with in-memory fallback) ============ */
 var memoryStore = {};
@@ -340,17 +465,34 @@ var FISH = [
   {id:"plitka", name:"Плітка",         emoji:"🐟", rarity:"common",    price:3},
   {id:"karas",  name:"Карась",         emoji:"🐟", rarity:"common",    price:4},
   {id:"okun",   name:"Окунь",          emoji:"🐟", rarity:"common",    price:5},
+  {id:"stavryda",name:"Ставрида",      emoji:"🐟", rarity:"common",    price:6},
   {id:"lyashch",name:"Лящ",            emoji:"🐠", rarity:"uncommon",  price:9},
   {id:"krasn",  name:"Краснопірка",    emoji:"🐠", rarity:"uncommon",  price:11},
   {id:"yorzh",  name:"Йорж",           emoji:"🐠", rarity:"uncommon",  price:8},
+  {id:"lyn",    name:"Линок",          emoji:"🐠", rarity:"uncommon",  price:12},
+  {id:"kambala",name:"Камбала",        emoji:"🐠", rarity:"uncommon",  price:13},
   {id:"sudak",  name:"Судак",          emoji:"🐡", rarity:"rare",      price:24},
   {id:"shchuka",name:"Щука",           emoji:"🐡", rarity:"rare",      price:28},
   {id:"som",    name:"Сом",            emoji:"🐡", rarity:"rare",      price:26},
+  {id:"minoga", name:"Минь",           emoji:"🐡", rarity:"rare",      price:30},
+  {id:"tuna",   name:"Тунець",         emoji:"🐡", rarity:"rare",      price:34},
   {id:"korop",  name:"Короп",          emoji:"🐬", rarity:"epic",      price:55},
   {id:"strut",  name:"Стерлядь",       emoji:"🐬", rarity:"epic",      price:65},
   {id:"forel",  name:"Форель",         emoji:"🐬", rarity:"epic",      price:60},
+  {id:"shark",  name:"Акула",          emoji:"🦈", rarity:"epic",      price:80},
   {id:"goldfish",name:"Золота рибка",  emoji:"✨", rarity:"legendary", price:220, flavor:"Каже, що виконає одне бажання. Але краще просто продати за круглу суму."},
-  {id:"gigasom",name:"Сом-Гігант",     emoji:"🐋", rarity:"legendary", price:260, flavor:"Старожили озера переказують про нього легенди."}
+  {id:"gigasom",name:"Сом-Гігант",     emoji:"🐋", rarity:"legendary", price:260, flavor:"Старожили озера переказують про нього легенди."},
+  {id:"tsarryba",name:"Цар-риба",      emoji:"👑", rarity:"legendary", price:320, flavor:"Легенда озера, яку бачили лише одиниці."},
+  {id:"kraken", name:"Кракен",         emoji:"🐙", rarity:"legendary", price:420, flavor:"Моряки присягаються, що бачили його щупальця в тумані."}
+];
+
+var LOCATIONS = [
+  {id:"river", name:"Річка", icon:"🏞️", unlockLevel:1, unlockCost:0,
+    fishIds:["boot","can","weed","plitka","karas","okun","lyashch","krasn","yorzh","sudak","shchuka","som","korop","strut","forel","goldfish","gigasom"]},
+  {id:"lake", name:"Озеро", icon:"🌾", unlockLevel:4, unlockCost:150,
+    fishIds:["boot","can","weed","plitka","karas","lyashch","lyn","sudak","minoga","korop","strut","tsarryba"]},
+  {id:"sea", name:"Море", icon:"🌊", unlockLevel:8, unlockCost:900,
+    fishIds:["can","weed","stavryda","kambala","tuna","shark","kraken"]}
 ];
 
 var RODS = [
@@ -366,11 +508,25 @@ var BAITS = [
   {id:3, name:"Магічна наживка", icon:"🔮", cost:1800, legBonus:2,   epicBonus:12}
 ];
 
+var QUEST_POOL = [
+  {id:"catch_any_5",  type:"catchAny",             count:5, reward:{coins:20, xp:10}, text:"Поймати 5 будь-якої риби"},
+  {id:"catch_any_10", type:"catchAny",             count:10,reward:{coins:40, xp:18}, text:"Поймати 10 будь-якої риби"},
+  {id:"catch_unc_3",  type:"catchRarity", rarity:"uncommon", count:3, reward:{coins:35, xp:15}, text:"Поймати 3 незвичайні рибини"},
+  {id:"catch_rare_2", type:"catchRarity", rarity:"rare",     count:2, reward:{coins:60, xp:25}, text:"Поймати 2 рідкісні рибини"},
+  {id:"catch_epic_1", type:"catchRarity", rarity:"epic",     count:1, reward:{coins:100,xp:40}, text:"Поймати 1 епічну рибину"},
+  {id:"sell_5",       type:"sellFish",             count:5, reward:{coins:25, xp:12}, text:"Продати 5 рибин"},
+  {id:"earn_60",      type:"earnCoins",            count:60,reward:{coins:0,  xp:22}, text:"Заробити 60 монет з продажу риби"},
+  {id:"cast_3",       type:"catchAny",             count:3, reward:{coins:15, xp:8},  text:"Поймати 3 будь-якої риби"}
+];
+
 /* ============ STATE ============ */
 var state = {
   level:1, xp:0, coins:25,
   rodTier:0, baitTier:0,
-  inventory:{} // id -> count
+  location:"river", unlockedLocations:["river"],
+  inventory:{}, // id -> count
+  quests:null,  // {date, list:[{id,progress,claimed}]}
+  guestId:null
 };
 
 function xpToNext(level){ return level*50; }
@@ -390,10 +546,20 @@ function loadState(){
 /* ============ DOM REFS ============ */
 var $ = function(id){ return document.getElementById(id); };
 var lvlBadge=$("lvlBadge"), xpLabel=$("xpLabel"), xpFill=$("xpFill"), coinsVal=$("coinsVal");
-var statusBanner=$("statusBanner"), bobber=$("bobber"), line=$("line"), scene=document.querySelector(".scene");
+var statusBanner=$("statusBanner"), bobber=$("bobber"), line=$("line"), scene=$("scene");
 var castBtn=$("castBtn"), hint=$("hint"), biteTimer=$("biteTimer"), biteTimerFill=$("biteTimerFill");
-var invBody=$("invBody"), shopBody=$("shopBody");
+var invBody=$("invBody"), shopBody=$("shopBody"), questsBody=$("questsBody"), lbBody=$("lbBody");
 var catchModalBg=$("catchModalBg"), catchCard=$("catchCard");
+var locRow=$("locRow"), toast=$("toast"), questDot=$("questDot");
+
+/* ============ TOAST ============ */
+var toastTimer=null;
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ toast.classList.remove("show"); }, 2200);
+}
 
 /* ============ STARFIELD ============ */
 (function buildStars(){
@@ -407,9 +573,42 @@ var catchModalBg=$("catchModalBg"), catchCard=$("catchCard");
   }
 })();
 
-/* ============ RENDER ============ */
+/* ============ HELPERS ============ */
 function fishById(id){ for(var i=0;i<FISH.length;i++){ if(FISH[i].id===id) return FISH[i]; } return null; }
+function locById(id){ for(var i=0;i<LOCATIONS.length;i++){ if(LOCATIONS[i].id===id) return LOCATIONS[i]; } return null; }
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, function(c){
+    return ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c];
+  });
+}
+function shuffle(arr){
+  for(var i=arr.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var t=arr[i]; arr[i]=arr[j]; arr[j]=t;
+  }
+  return arr;
+}
+function todayStr(){
+  var d=new Date();
+  return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+}
+function avatarHtml(photoUrl, cssClass){
+  if(photoUrl){
+    return '<div class="'+cssClass+'"><img src="'+encodeURI(photoUrl)+'" onerror="this.parentNode.innerHTML=\'🎣\';" alt=""></div>';
+  }
+  return '<div class="'+cssClass+'">🎣</div>';
+}
+function grantLevelUps(){
+  var leveled=false;
+  while(state.xp >= xpToNext(state.level)){
+    state.xp -= xpToNext(state.level);
+    state.level += 1;
+    leveled = true;
+  }
+  return leveled;
+}
 
+/* ============ RENDER: HEADER ============ */
 function render(){
   lvlBadge.textContent = state.level;
   var need = xpToNext(state.level);
@@ -418,10 +617,70 @@ function render(){
   coinsVal.textContent = state.coins;
   var rod = RODS[state.rodTier], bait = BAITS[state.baitTier];
   hint.textContent = "Вудка: " + rod.name + " · Наживка: " + bait.name;
+
+  ensureDailyQuests();
+  renderLocations();
   renderInventory();
   renderShop();
+  renderQuests();
+  updateQuestDot();
 }
 
+/* ============ LOCATIONS ============ */
+function renderLocations(){
+  var html = "";
+  LOCATIONS.forEach(function(loc){
+    var unlocked = state.unlockedLocations.indexOf(loc.id) !== -1;
+    var active = state.location === loc.id;
+    if(unlocked){
+      html += '<div class="loc-chip'+(active?" active":"")+'" data-loc="'+loc.id+'">' +
+        '<span class="ic">'+loc.icon+'</span>'+loc.name+'</div>';
+    } else {
+      html += '<div class="loc-chip locked" data-lock="'+loc.id+'">' +
+        '<span class="ic">🔒</span>'+loc.name+
+        '<span class="lock-cost">Рів.'+loc.unlockLevel+' · '+loc.unlockCost+'💰</span></div>';
+    }
+  });
+  locRow.innerHTML = html;
+
+  locRow.querySelectorAll("[data-loc]").forEach(function(el){
+    el.addEventListener("click", function(){ selectLocation(el.getAttribute("data-loc")); });
+  });
+  locRow.querySelectorAll("[data-lock]").forEach(function(el){
+    el.addEventListener("click", function(){ tryUnlockLocation(el.getAttribute("data-lock")); });
+  });
+
+  scene.classList.remove("loc-river","loc-lake","loc-sea");
+  scene.classList.add("loc-"+state.location);
+}
+
+function selectLocation(id){
+  if(gameState !== "idle") return;
+  state.location = id;
+  saveState();
+  renderLocations();
+}
+
+function tryUnlockLocation(id){
+  var loc = locById(id);
+  if(!loc) return;
+  if(state.level < loc.unlockLevel){
+    showToast("Потрібен рівень "+loc.unlockLevel);
+    return;
+  }
+  if(state.coins < loc.unlockCost){
+    showToast("Не вистачає монет: потрібно "+loc.unlockCost+" 💰");
+    return;
+  }
+  state.coins -= loc.unlockCost;
+  state.unlockedLocations.push(loc.id);
+  state.location = loc.id;
+  saveState(); render();
+  tgHaptic("success");
+  showToast("Локацію \""+loc.name+"\" відкрито! 🎉");
+}
+
+/* ============ INVENTORY ============ */
 function renderInventory(){
   var ids = Object.keys(state.inventory).filter(function(id){ return state.inventory[id] > 0; });
   if(ids.length === 0){
@@ -453,8 +712,19 @@ function renderInventory(){
   if(sellAllBtn) sellAllBtn.addEventListener("click", sellAllInventory);
 }
 
+/* ============ SHOP ============ */
 function renderShop(){
-  var html = '<div class="shop-section-title">Вудки</div>';
+  var tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
+  var name = tgUser ? (tgUser.first_name || "Рибак") : "Гість";
+  var photoUrl = tgUser ? tgUser.photo_url : null;
+  var html = '<div class="profile-card">' +
+    avatarHtml(photoUrl, "profile-ava") +
+    '<div class="profile-info"><div class="profile-name">'+escapeHtml(name)+'</div>' +
+    '<div class="profile-sub">Рівень '+state.level+' · '+state.coins+' 💰</div></div>' +
+    '<button class="profile-sync-btn" id="syncBtn">🔄 Синхронізувати</button>' +
+    '</div>';
+
+  html += '<div class="shop-section-title">Вудки</div>';
   RODS.forEach(function(rod, i){
     var owned = i <= state.rodTier;
     var active = i === state.rodTier;
@@ -483,6 +753,9 @@ function renderShop(){
       '</div>';
   });
   shopBody.innerHTML = html;
+
+  var syncBtn = $("syncBtn");
+  if(syncBtn) syncBtn.addEventListener("click", syncWithBot);
 
   shopBody.querySelectorAll("[data-buy-rod]").forEach(function(b){
     b.addEventListener("click", function(){ buyRod(parseInt(b.getAttribute("data-buy-rod"))); });
@@ -517,16 +790,19 @@ function sellOne(id){
   state.inventory[id] -= 1;
   state.coins += f.price;
   if(state.inventory[id] <= 0) delete state.inventory[id];
+  progressQuests("sell", {count:1, coins:f.price});
   saveState(); render(); tgHaptic("light");
 }
 function sellAllInventory(){
-  var total = 0;
+  var total = 0, count = 0;
   Object.keys(state.inventory).forEach(function(id){
     var f = fishById(id);
     total += f.price * state.inventory[id];
+    count += state.inventory[id];
   });
   state.inventory = {};
   state.coins += total;
+  progressQuests("sell", {count:count, coins:total});
   saveState(); render(); tgHaptic("success");
 }
 
@@ -540,24 +816,195 @@ function tgHaptic(type){
   }
 }
 
+/* ============ DAILY QUESTS ============ */
+function ensureDailyQuests(){
+  var today = todayStr();
+  if(!state.quests || state.quests.date !== today){
+    var pool = shuffle(QUEST_POOL.slice());
+    var picked = pool.slice(0,3).map(function(q){
+      return {id:q.id, progress:0, claimed:false};
+    });
+    state.quests = {date: today, list: picked};
+    saveState();
+  }
+}
+
+function questTpl(id){ for(var i=0;i<QUEST_POOL.length;i++){ if(QUEST_POOL[i].id===id) return QUEST_POOL[i]; } return null; }
+
+function progressQuests(event, payload){
+  ensureDailyQuests();
+  var changed = false;
+  state.quests.list.forEach(function(q){
+    if(q.claimed) return;
+    var t = questTpl(q.id);
+    if(!t) return;
+    if(t.type==="catchAny" && event==="catch"){
+      q.progress = Math.min(t.count, q.progress+1); changed = true;
+    } else if(t.type==="catchRarity" && event==="catch" && payload.rarity===t.rarity){
+      q.progress = Math.min(t.count, q.progress+1); changed = true;
+    } else if(t.type==="sellFish" && event==="sell"){
+      q.progress = Math.min(t.count, q.progress+payload.count); changed = true;
+    } else if(t.type==="earnCoins" && event==="sell"){
+      q.progress = Math.min(t.count, q.progress+payload.coins); changed = true;
+    }
+  });
+  if(changed) saveState();
+}
+
+function renderQuests(){
+  ensureDailyQuests();
+  var html = "";
+  state.quests.list.forEach(function(q, i){
+    var t = questTpl(q.id);
+    if(!t) return;
+    var pct = Math.min(100, (q.progress/t.count)*100);
+    var ready = q.progress >= t.count && !q.claimed;
+    html += '<div class="quest-row">' +
+      '<div class="quest-top"><div class="quest-title">'+t.text+'</div>' +
+      '<div class="quest-reward">+'+t.reward.coins+'💰 +'+t.reward.xp+'дс</div></div>' +
+      '<div class="quest-bar"><div class="quest-bar-fill" style="width:'+pct+'%"></div></div>' +
+      '<button class="quest-claim'+(q.claimed?" done":"")+'" data-claim="'+i+'" '+((ready)?"":"disabled")+'>' +
+      (q.claimed ? "Отримано ✓" : ready ? "Забрати нагороду" : q.progress+"/"+t.count) +
+      '</button></div>';
+  });
+  html += '<div class="quest-reset-hint">Квести оновлюються щодня 🌅</div>';
+  questsBody.innerHTML = html;
+
+  questsBody.querySelectorAll("[data-claim]").forEach(function(btn){
+    btn.addEventListener("click", function(){ claimQuest(parseInt(btn.getAttribute("data-claim"))); });
+  });
+}
+
+function claimQuest(i){
+  var q = state.quests.list[i];
+  var t = questTpl(q.id);
+  if(!q || !t || q.claimed || q.progress < t.count) return;
+  state.coins += t.reward.coins;
+  state.xp += t.reward.xp;
+  q.claimed = true;
+  grantLevelUps();
+  saveState(); render();
+  tgHaptic("success");
+  showToast("Нагороду отримано! +"+t.reward.coins+"💰");
+}
+
+function updateQuestDot(){
+  var ready = state.quests && state.quests.list.some(function(q){
+    var t = questTpl(q.id);
+    return t && !q.claimed && q.progress >= t.count;
+  });
+  questDot.style.display = ready ? "block" : "none";
+}
+
+/* ============ BOT SYNC ============ */
+function syncWithBot(){
+  if(!tg || typeof tg.sendData !== "function"){
+    showToast("Синхронізація доступна лише в Telegram");
+    return;
+  }
+  var payload = {
+    type: "fishing_sync",
+    coins: state.coins,
+    level: state.level,
+    xp: state.xp,
+    location: state.location
+  };
+  try{
+    tg.sendData(JSON.stringify(payload));
+    showToast("Дані відправлено боту ✅");
+  }catch(e){
+    showToast("Не вдалося синхронізувати");
+  }
+}
+
+/* ============ LEADERBOARD (Firebase, optional) ============ */
+function isFirebaseConfigured(){
+  return !!(FIREBASE_CONFIG.databaseURL && FIREBASE_CONFIG.databaseURL.length > 0);
+}
+function withTimeout(promise, ms){
+  return new Promise(function(resolve, reject){
+    var timer = setTimeout(function(){ reject(new Error("timeout")); }, ms);
+    promise.then(function(v){ clearTimeout(timer); resolve(v); },
+                 function(e){ clearTimeout(timer); reject(e); });
+  });
+}
+var fb = {app:null, db:null, mod:null};
+function loadFirebase(){
+  if(fb.app) return Promise.resolve(fb);
+  return Promise.all([
+    import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"),
+    import("https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js")
+  ]).then(function(mods){
+    var appMod = mods[0], dbMod = mods[1];
+    fb.app = appMod.initializeApp(FIREBASE_CONFIG);
+    fb.db = dbMod.getDatabase(fb.app);
+    fb.mod = dbMod;
+    return fb;
+  });
+}
+function submitScore(){
+  if(!isFirebaseConfigured()) return;
+  var score = state.level*1000 + state.coins;
+  var tgUser = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : null;
+  var uid = tgUser ? String(tgUser.id) : ("guest_" + (state.guestId || (state.guestId = Math.random().toString(36).slice(2))));
+  var name = tgUser ? (tgUser.first_name || "Рибак") : "Гість";
+  var photoUrl = tgUser && tgUser.photo_url ? tgUser.photo_url : null;
+  withTimeout(loadFirebase(), 4000).then(function(){
+    return fb.mod.set(fb.mod.ref(fb.db, "leaderboard/" + uid), {name:name, score:score, level:state.level, coins:state.coins, photoUrl:photoUrl});
+  }).catch(function(e){ console.warn("Firebase submit failed", e); });
+}
+function renderLeaderboard(){
+  if(!isFirebaseConfigured()){
+    lbBody.innerHTML = '<div class="empty-state">Загальний рейтинг зʼявиться, коли розробник підключить базу даних.<br><br>Твій рахунок: <b>'+ (state.level*1000+state.coins) +'</b></div>';
+    return;
+  }
+  lbBody.innerHTML = '<div class="empty-state">Завантаження...</div>';
+  withTimeout(loadFirebase(), 4000).then(function(){
+    return fb.mod.get(fb.mod.query(fb.mod.ref(fb.db, "leaderboard"), fb.mod.orderByChild("score"), fb.mod.limitToLast(20)));
+  }).then(function(snap){
+    var rows = [];
+    snap.forEach(function(child){ rows.push(child.val()); });
+    rows.sort(function(a,b){ return b.score - a.score; });
+    if(rows.length === 0){
+      lbBody.innerHTML = '<div class="empty-state">Ще немає результатів.<br>Будь першим! 🎣</div>';
+      return;
+    }
+    var html = "";
+    rows.slice(0,20).forEach(function(r, i){
+      var rankClass = i===0?"top1":i===1?"top2":i===2?"top3":"";
+      html += '<div class="lb-row"><div class="lb-rank '+rankClass+'">'+(i+1)+'</div>' +
+        avatarHtml(r.photoUrl, "lb-ava") +
+        '<div class="lb-name">'+escapeHtml(r.name||"Рибак")+'</div>' +
+        '<div class="lb-score">'+r.score+'</div></div>';
+    });
+    lbBody.innerHTML = html;
+  }).catch(function(){
+    lbBody.innerHTML = '<div class="empty-state">Не вдалося завантажити рейтинг.<br>Перевір з’єднання.</div>';
+  });
+}
+
 /* ============ TAB NAV ============ */
-var panels = {inv: $("invPanel"), shop: $("shopPanel")};
+var panels = {inv: $("invPanel"), shop: $("shopPanel"), quests: $("questsPanel"), lb: $("lbPanel")};
+function closeAllPanels(){
+  Object.keys(panels).forEach(function(k){ panels[k].classList.remove("open"); });
+}
 document.querySelectorAll(".nav-btn").forEach(function(btn){
   btn.addEventListener("click", function(){
     var tab = btn.getAttribute("data-tab");
     document.querySelectorAll(".nav-btn").forEach(function(b){ b.classList.remove("active"); });
+    btn.classList.add("active");
     if(tab === "fish"){
-      btn.classList.add("active");
-      panels.inv.classList.remove("open"); panels.shop.classList.remove("open");
+      closeAllPanels();
     } else {
-      btn.classList.add("active");
+      closeAllPanels();
       panels[tab].classList.add("open");
+      if(tab === "lb") renderLeaderboard();
     }
   });
 });
 document.querySelectorAll("[data-close]").forEach(function(btn){
   btn.addEventListener("click", function(){
-    panels[btn.getAttribute("data-close")].classList.remove("open");
+    closeAllPanels();
     document.querySelectorAll(".nav-btn").forEach(function(b){ b.classList.remove("active"); });
     document.querySelector('[data-tab="fish"]').classList.add("active");
   });
@@ -565,7 +1012,7 @@ document.querySelectorAll("[data-close]").forEach(function(btn){
 
 /* ============ FISHING GAME LOOP ============ */
 var gameState = "idle"; // idle -> waiting -> biting -> resolving
-var biteTimeout = null, biteWindowTimeout = null, biteAnimFrame = null;
+var biteTimeout = null, biteWindowTimeout = null;
 
 function setBobberDepth(pct){
   bobber.style.top = pct + "%";
@@ -593,11 +1040,9 @@ function startCast(){
     spawnRipple();
     gameState = "waiting";
     statusBanner.textContent = "Чекаємо на клювання...";
-    castBtn.disabled = false;
     castBtn.textContent = "Чекати...";
     castBtn.disabled = true;
 
-    var rod = RODS[state.rodTier];
     var delay = 1200 + Math.random()*2200;
     biteTimeout = setTimeout(triggerBite, delay);
   }, 550);
@@ -652,6 +1097,7 @@ function resetBiteUI(){
 
 function pickFish(){
   var rod = RODS[state.rodTier], bait = BAITS[state.baitTier];
+  var loc = locById(state.location) || LOCATIONS[0];
   var weights = {};
   Object.keys(RARITY).forEach(function(k){ weights[k] = RARITY[k].weight; });
   weights.rare += rod.rareBonus;
@@ -666,7 +1112,8 @@ function pickFish(){
     acc += weights[k];
     if(roll <= acc){ chosenRarity = k; break; }
   }
-  var pool = FISH.filter(function(f){ return f.rarity === chosenRarity; });
+  var pool = FISH.filter(function(f){ return f.rarity === chosenRarity && loc.fishIds.indexOf(f.id) !== -1; });
+  if(pool.length === 0) pool = FISH.filter(function(f){ return f.rarity === chosenRarity; });
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
@@ -681,14 +1128,11 @@ function successCatch(){
   var r = RARITY[fish.rarity];
   state.inventory[fish.id] = (state.inventory[fish.id]||0) + 1;
   state.xp += r.xp;
-  var leveled = false;
-  while(state.xp >= xpToNext(state.level)){
-    state.xp -= xpToNext(state.level);
-    state.level += 1;
-    leveled = true;
-  }
+  var leveled = grantLevelUps();
+  progressQuests("catch", {rarity: fish.rarity});
   saveState();
   render();
+  submitScore();
   tgHaptic(fish.rarity === "legendary" || fish.rarity === "epic" ? "success" : "light");
   showCatchModal(fish, r, leveled);
 }

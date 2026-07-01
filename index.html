@@ -978,8 +978,9 @@ function renderLeaderboard(){
         '<div class="lb-score">'+r.score+'</div></div>';
     });
     lbBody.innerHTML = html;
-  }).catch(function(){
-    lbBody.innerHTML = '<div class="empty-state">Не вдалося завантажити рейтинг.<br>Перевір з’єднання.</div>';
+  }).catch(function(err){
+    var msg = (err && err.message) ? err.message : String(err);
+    lbBody.innerHTML = '<div class="empty-state">Не вдалося завантажити рейтинг.<br><br><span style="opacity:.7; font-size:11px;">Деталі: '+escapeHtml(msg)+'</span></div>';
   });
 }
 
